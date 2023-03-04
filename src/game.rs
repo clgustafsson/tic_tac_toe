@@ -1,5 +1,3 @@
-use crate::engine::*;
-
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum State {
     None,
@@ -28,11 +26,6 @@ impl Default for Game{
 }
 
 impl Game {
-    pub fn go(self) {
-        let mut root: Node = Node::new(self);
-        root.go();
-    }
-    
     pub fn other_player(&self) -> State {
         match self.turn {
             State::X => {State::O},

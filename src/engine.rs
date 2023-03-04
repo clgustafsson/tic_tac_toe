@@ -1,3 +1,4 @@
+use rand::seq::SliceRandom;
 use crate::game::*;
 
 pub struct Node {
@@ -32,7 +33,9 @@ impl Node {
                 best_result = self.game.turn;
                 break
             }
-            else if child.game.win == State::Draw {best_result = State::Draw}
+            else if child.game.win == State::Draw {
+                best_result = State::Draw
+            }
         }
         self.children.retain(|x| x.game.win == best_result);
         self.game.win = best_result;
@@ -43,7 +46,7 @@ impl Node {
         self.create_tree();
         while self.drop_bad_children() {}
         println!("{:?}",self.children.last().unwrap().game.win);
-        self.children.last().unwrap().game.print();
+        self.children.choose(&mut rand::thread_rng()).unwrap().game.print();
     }
 
 }
