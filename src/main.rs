@@ -11,7 +11,6 @@ fn main() {
 
     root.game.play_move([2, 2]);
     root.game.play_move([1, 2]);
-    root.game.play_move([1, 1]);
 
     root.go();
 }
