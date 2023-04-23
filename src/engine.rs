@@ -14,7 +14,8 @@ impl Node {
     fn create_tree(&mut self) {
         for cord in self.game.legal_moves.iter() {
             let mut game_clone = self.game.clone();
-            game_clone.play_move(*cord);
+            game_clone.play_move(*cord).unwrap_or_else(|e| {
+                eprintln!("Error when playing move: {}", e)});
             self.children.push(Self::new(game_clone));
         }
         for child in self.children.iter_mut() {
@@ -42,11 +43,15 @@ impl Node {
         false
     }
 
-    pub fn go(&mut self) {
+    pub fn go(&mut self, print: bool) -> String {
         self.create_tree();
         while self.drop_bad_children() {}
-        println!("{:?}",self.children.last().unwrap().game.win);
-        self.children.choose(&mut rand::thread_rng()).unwrap().game.print();
+        let future = &self.children.choose(&mut rand::thread_rng()).unwrap().game.clone();
+        if print {
+            println!("{:?}",self.children.last().unwrap().game.win);
+            future.print()
+        }
+        return format!("{}{}", future.last_move.unwrap()[0], future.last_move.unwrap()[1]);
     }
 
 }
